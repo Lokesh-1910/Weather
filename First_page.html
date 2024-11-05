@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Page Layout */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: url('Clouds.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            margin-top:30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgb(255, 255, 255,0.01);
+            padding: 15px;
+            color: white;
+            height: 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-right: 55px;
+        }
+
+        /* Menu Button, Signup and Login */
+    .header-actions {
+    display: flex; /* Add this to lay out buttons in a row */
+    align-items: center; /* Center vertically */
+    }
+
+    .menu-button {
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-right: 10px; /* Adjust as needed */
+    background: none;
+    border: none;
+    color: white;
+    }
+
+    .login-btn {
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 950px; /* Adjusted to align with menu button */
+    background: none;
+    border: none;
+    color: white;
+    }
+
+    .signup-btn {
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 25px; /* No margin to align with signup button */
+    background: none;
+    border: none;
+    color: white;
+    }
+        /* Dashboard Dropdown */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
+
+        .menu-button:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Transparent Container */
+        .main-container {
+            background: rgb(255, 255, 255,0.01);
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+
+        /* Introductory Text */
+        .para {
+            text-align:start;
+            max-width: 900px;
+            margin-top: 45px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #444343;
+        }
+        
+
+        /* Dropdown Styling */
+        .district-selection {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #272626;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        /* Centered Current Temperature */
+        .current-temp {
+            font-size: 2rem;
+            margin: 30px 0;
+            text-align: center;
+            color: #272626;
+        }
+
+        /* Forecast Cards */
+        .forecast-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 55px;
+            justify-content: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .forecast-card {
+            background-image: url('F1.jpg');
+            color: rgb(0, 0, 0);
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1 1 30%; /* Full width for larger screens */
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 9);
+        }
+
+        .day-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .temp {
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+
+        .description {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .sun-info {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-logo">
+            <span class="header-title">Weather App</span>
+        </div>
+        <div class="header-actions">
+            <button class="login-btn">Login</button>
+            <button class="signup-btn">Sign Up</button>
+        </div>
+        <div class="header-actions">
+            <div class="menu-button"> ☰
+                <div class="dropdown-content">
+                    <a href="#">Visualization</a>
+                    <a href="#">Notifications</a>
+                    <a href="#">Terms and Conditions</a>
+                    <a href="#">Wind Speed</a>
+                    <a href="#">Humidity</a>
+                    <a href="#">Rain Probability</a>
+                    <a href="#">UV Index</a>
+                    <a href="#">Air Quality</a>
+                    <a href="#">Settings</a>
+                    <a href="#">Weekly Forecast</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+    <!-- Introductory Content -->
+    <div class="para">
+        <p>Welcome to our Weather App, your go-to platform for accurate and up-to-date weather information. 
+           Stay informed with daily forecasts, current temperatures, and key sunrise and sunset times tailored for your district.</p>
+        <p>Explore our forecast features, check weekly trends, and make informed plans for the week ahead. 
+           Select your district below to get started!</p>
+    </div>
+
+    <!-- District Selection -->
+    <div class="district-selection">
+        <label for="district">Select District:</label>
+        <select id="district" onchange="fetchWeatherData()">
+            <option value="">--Choose a District--</option>
+            <option value="Ariyalur">Ariyalur</option>
+            <option value="Chengalpattu">Chengalpattu</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Coimbatore">Coimbatore</option>
+            <option value="Cuddalore">Cuddalore</option>
+            <option value="Dharmapuri">Dharmapuri</option>
+            <option value="Dindigul">Dindigul</option>
+            <option value="Erode">Erode</option>
+            <option value="Kallakurichi">Kallakurichi</option>
+            <option value="Kanchipuram">Kanchipuram</option>
+            <option value="Kanyakumari">Kanyakumari</option>
+            <option value="Karur">Karur</option>
+            <option value="Krishnagiri">Krishnagiri</option>
+            <option value="Madurai">Madurai</option>
+            <option value="Nagapattinam">Nagapattinam</option>
+            <option value="Namakkal">Namakkal</option>
+            <option value="Nilgiris">Nilgiris</option>
+            <option value="Perambalur">Perambalur</option>
+            <option value="Pudukkottai">Pudukkottai</option>
+            <option value="Ramanathapuram">Ramanathapuram</option>
+            <option value="Ranipet">Ranipet</option>
+            <option value="Salem">Salem</option>
+            <option value="Sivaganga">Sivaganga</option>
+            <option value="Tenkasi">Tenkasi</option>
+            <option value="Thanjavur">Thanjavur</option>
+            <option value="Theni">Theni</option>
+            <option value="Thiruvallur">Thiruvallur</option>
+            <option value="Thiruvarur">Thiruvarur</option>
+            <option value="Tuticorin">Tuticorin</option>
+            <option value="Trichirappalli">Trichirappalli</option>
+            <option value="Thirunelveli">Thirunelveli</option>
+            <option value="Tirupattur">Tirupattur</option>
+            <option value="Tiruppur">Tiruppur</option>
+            <option value="Tiruvannamalai">Tiruvannamalai</option>
+            <option value="Vellore">Vellore</option>
+            <option value="Villupuram">Villupuram</option>
+            <option value="Virudhunagar">Virudhunagar</option>
+        </select>
+    </div>
+
+    <!-- Current Temperature Display -->
+    <div class="current-temp" id="currentTemp">Select a district to view the weather.</div>
+
+    <!-- 7-Day Forecast Cards -->
+    <div class="forecast-container" id="forecastContainer">
+        <!-- Weather cards will be injected here -->
+    </div>
+
+
+    <script>
+        const apiKey = '03e4c99ee9d840c0a68160909240511';
+
+        async function fetchWeatherData() {
+            const district = document.getElementById('district').value;
+            if (!district) {
+                alert("Please select a district.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${district}&days=7`);
+                const data = await response.json();
+
+                if (data.error) {
+                    alert("Error: " + data.error.message);
+                    return;
+                }
+
+                // Display current temperature
+                const currentTemp = data.current.temp_c;
+                document.getElementById('currentTemp').textContent = `Current Temperature in ${district}: ${currentTemp}°C`;
+
+                // Populate 7-day forecast as cards
+                const forecastContainer = document.getElementById('forecastContainer');
+                forecastContainer.innerHTML = '';  // Clear previous data
+
+                data.forecast.forecastday.forEach(day => {
+                    const date = new Date(day.date);
+                    const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+
+                    const card = document.createElement('div');
+                    card.classList.add('forecast-card');
+                    card.innerHTML = `
+                        <div class="day-name">${dayName}</div>
+                        <div class="temp">${day.day.avgtemp_c}°C</div>
+                        <div class="description">${day.day.condition.text}</div>
+                        <div class="sun-info">Sunrise: ${day.astro.sunrise}</div>
+                        <div class="sun-info">Sunset: ${day.astro.sunset}</div>
+                    `;
+                    forecastContainer.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                alert("Unable to fetch weather data. Please try again.");
+            }
+        }
+    </script>
+     <div class="para">
+        <p>Stay Ahead with Our Weather App 🌦️</p>
+        <p></p>
+        <p>1.With accurate, up-to-date forecasts, our app helps you plan your days better! Get insights into the weather patterns of your district, from sunny skies to sudden rain showers. Know what to expect today, tomorrow, and beyond, and stay prepared for every weather surprise.</p>
+        <p>2.Explore real-time weather insights and make informed choices—whether it's gearing up for a weekend adventure, staying cozy on a chilly day, or catching a perfect sunset. 🌅</p>
+        <p>3.Stay tuned for even more updates as we bring you climate tips, weather news, and personalized suggestions to make the most of each season!</p>
+    </div>
+</div>
+</body>
+</html>
