@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast - Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            background: url('Clouds.jpg') no-repeat center center fixed;
+            background-size: cover;
+            align-items: center;
+            margin: 20px;
+        }
+        .chart-container {
+            width: 80%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        #district {
+            padding: 5px;
+            font-size: 1rem;
+        }
+        .fetch-btn {
+            padding: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Weather Forecast - 15 Days</h2>
+    <div class="district-selection">
+        <label for="district">Select District:</label>
+        <select id="district">
+            <option value="">--Choose a District--</option>
+            <option value="Ariyalur">Ariyalur</option>
+            <option value="Chengalpattu">Chengalpattu</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Coimbatore">Coimbatore</option>
+            <option value="Cuddalore">Cuddalore</option>
+            <option value="Dharmapuri">Dharmapuri</option>
+            <option value="Dindigul">Dindigul</option>
+            <option value="Erode">Erode</option>
+            <option value="Kallakurichi">Kallakurichi</option>
+            <option value="Kanchipuram">Kanchipuram</option>
+            <option value="Kanyakumari">Kanyakumari</option>
+            <option value="Karur">Karur</option>
+            <option value="Krishnagiri">Krishnagiri</option>
+            <option value="Madurai">Madurai</option>
+            <option value="Nagapattinam">Nagapattinam</option>
+            <option value="Namakkal">Namakkal</option>
+            <option value="Nilgiris">Nilgiris</option>
+            <option value="Perambalur">Perambalur</option>
+            <option value="Pudukkottai">Pudukkottai</option>
+            <option value="Ramanathapuram">Ramanathapuram</option>
+            <option value="Ranipet">Ranipet</option>
+            <option value="Salem">Salem</option>
+            <option value="Sivaganga">Sivaganga</option>
+            <option value="Tenkasi">Tenkasi</option>
+            <option value="Thanjavur">Thanjavur</option>
+            <option value="Theni">Theni</option>
+            <option value="Thiruvallur">Thiruvallur</option>
+            <option value="Thiruvarur">Thiruvarur</option>
+            <option value="Tuticorin">Tuticorin</option>
+            <option value="Trichirappalli">Trichirappalli</option>
+            <option value="Thirunelveli">Thirunelveli</option>
+            <option value="Tirupattur">Tirupattur</option>
+            <option value="Tiruppur">Tiruppur</option>
+            <option value="Tiruvannamalai">Tiruvannamalai</option>
+            <option value="Vellore">Vellore</option>
+            <option value="Villupuram">Villupuram</option>
+            <option value="Virudhunagar">Virudhunagar</option>
+        </select>
+    </div>
+    <button class="fetch-btn" onclick="fetchWeatherData()">Fetch Weather Data</button>
+
+    <div class="chart-container">
+        <canvas id="lineChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <script>
+        const apiKey = 'YQT5WBWTHHKTKXMTVPW9SQDGC';
+
+        async function fetchWeatherData() {
+            const district = document.getElementById('district').value;
+            if (!district) {
+                alert("Please enter a district.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${district}?unitGroup=metric&key=${apiKey}&contentType=json`);
+                const data = await response.json();
+
+                if (data.error) {
+                    alert("Error: " + data.error.message);
+                    return;
+                }
+
+                // Extract 15-day temperature and date data
+                const dates = [];
+                const temperatures = [];
+                
+                data.days.slice(0, 15).forEach(day => {
+                    dates.push(day.datetime);
+                    temperatures.push(day.temp);
+                });
+
+                // Update line and bar charts
+                updateLineChart(dates, temperatures);
+                updateBarChart(dates, temperatures);
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                alert("Unable to fetch weather data. Please try again.");
+            }
+        }
+
+        // Function to update line chart
+        function updateLineChart(dates, temperatures) {
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        data: temperatures,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '15-Day Temperature Forecast'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to update bar chart
+        function updateBarChart(dates, temperatures) {
+            const ctx = document.getElementById('barChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        data: temperatures,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '15-Day Temperature Forecast (Bar Chart)'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
